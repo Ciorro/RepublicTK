@@ -8,7 +8,7 @@ namespace RepublicTK.Trees.Models
         public byte TicksToMaturity { get; set; }
 
         public Tree()
-        { 
+        {
         }
 
         public Tree(Vector3 position)

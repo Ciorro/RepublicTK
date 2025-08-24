@@ -11,9 +11,10 @@ namespace RepublicTK.Trees.Serialization
     {
         public TreeGroup Read(BinaryReader reader, SerializationContext context)
         {
-            var group = new TreeGroup(
-                treeId: reader.ReadCString(Encoding.ASCII, 64),
-                capacity: reader.ReadInt32());
+            string treeId = reader.ReadCString(Encoding.ASCII, 64);
+            int capacity = reader.ReadInt32();
+
+            var group = new TreeGroup(treeId, capacity);
 
             for (int i = 0; i < group.Capacity; i++)
             {

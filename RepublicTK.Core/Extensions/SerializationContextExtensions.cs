@@ -3,7 +3,7 @@ using RepublicTK.Core.Serialization.Common;
 
 namespace RepublicTK.Core.Extensions
 {
-    public static class SerializerContextExtensions
+    public static class SerializationContextExtensions
     {
         public static T Read<T>(this SerializationContext context, BinaryReader reader)
         {
