@@ -52,5 +52,11 @@ namespace RepublicTK.Core.Extensions
                 }
             }
         }
+
+        public static void Write(this BinaryWriter writer, BoundingBox boundingBox)
+        {
+            writer.Write(boundingBox.Min);
+            writer.Write(boundingBox.Max);
+        }
     }
 }

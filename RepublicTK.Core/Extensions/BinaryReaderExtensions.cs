@@ -63,6 +63,12 @@ namespace RepublicTK.Core.Extensions
 
             return matrix;
         }
+
+        public static BoundingBox ReadBoundingBox(this BinaryReader reader)
+        {
+            Vector3 min = ReadVector3(reader);
+            Vector3 max = ReadVector3(reader);
+            return new BoundingBox(min, max);
         }
     }
 }
