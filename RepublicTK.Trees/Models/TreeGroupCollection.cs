@@ -54,6 +54,14 @@ namespace RepublicTK.Trees.Models
         public bool ContainsGroup(string treeId)
             => _groups.ContainsKey(treeId);
 
+        public void Merge(TreeGroupCollection other)
+        {
+            foreach (var group in other)
+            {
+                Add(group);
+            }
+        }
+
         public IEnumerator<TreeGroup> GetEnumerator()
             => _groups.Values.GetEnumerator();
 
