@@ -4,11 +4,18 @@ namespace RepublicTK.Trees.Models
 {
     public class TreeGroupCollection : IEnumerable<TreeGroup>
     {
-        private readonly Dictionary<string, TreeGroup> _groups;
+        private readonly Dictionary<string, TreeGroup> _groups = new();
 
         public TreeGroupCollection()
         {
-            _groups = new Dictionary<string, TreeGroup>();
+        }
+
+        public TreeGroupCollection(IEnumerable<TreeGroup> groups)
+        {
+            foreach (var group in groups)
+            {
+                Add(group);
+            }
         }
 
         public int Count
