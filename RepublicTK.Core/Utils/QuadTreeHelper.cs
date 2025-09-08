@@ -1,19 +1,19 @@
-﻿using RepublicTK.Core.Models;
+﻿using System.Numerics;
 
-namespace RepublicTK.Core.Serialization.Common
+namespace RepublicTK.Core.Utils
 {
-    public class RegionSerializer : ISerializer<Region>
+    public class QuadTreeHelper
     {
         private readonly int _worldOrigin;
         private readonly int _quadtreeSize;
         private readonly float _unitSize;
         private readonly int[,]? _regions;
 
-        public RegionSerializer()
+        public QuadTreeHelper()
             : this(20000, 6)
         { }
 
-        public RegionSerializer(int worldSize, int quadtreeLevels)
+        public QuadTreeHelper(int worldSize, int quadtreeLevels)
         {
             _quadtreeSize = (int)Math.Pow(2, quadtreeLevels);
             _regions = new int[_quadtreeSize, _quadtreeSize];
@@ -52,24 +52,20 @@ namespace RepublicTK.Core.Serialization.Common
             }
         }
 
-        public Region Read(BinaryReader reader, SerializationContext context)
+        public int GetPositionIndex(Vector3 position)
         {
-            throw new NotImplementedException();
+            return GetPositionIndex(position.X, position.Z);
         }
 
-        public void Write(BinaryWriter writer, SerializationContext context, Region value)
+        public int GetPositionIndex(Vector2 position)
         {
-            writer.Write(GetRegion(value.RegionPosition.X, value.RegionPosition.Z));
+            return GetPositionIndex(position.X, position.Y);
         }
 
-        private int GetRegion(double x, double y)
+        public int GetPositionIndex(float x, float y)
         {
-            x += _worldOrigin;
-            y += _worldOrigin;
-
-            int idX = (int)Math.Clamp(x / _unitSize, 0, _quadtreeSize - 1);
-            int idZ = (int)Math.Clamp(y / _unitSize, 0, _quadtreeSize - 1);
-
+            int idX = (int)Math.Clamp((x + _worldOrigin) / _unitSize, 0, _quadtreeSize - 1);
+            int idZ = (int)Math.Clamp((y + _worldOrigin) / _unitSize, 0, _quadtreeSize - 1);
             return _regions![idX, idZ];
         }
     }
