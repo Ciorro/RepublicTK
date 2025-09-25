@@ -1,5 +1,5 @@
-﻿using RepublicTK.Extensions;
-using RepublicTK.Serialization;
+﻿using RepublicTK.Serialization;
+using RepublicTK.Serialization.Extensions;
 using RepublicTK.Serialization.Trees.Models;
 using RepublicTK.Utils;
 

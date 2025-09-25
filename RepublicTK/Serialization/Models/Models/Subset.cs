@@ -1,4 +1,4 @@
-﻿namespace RepublicTK.Models.Models
+﻿namespace RepublicTK.Serialization.Models.Models
 {
     public class Subset
     {
@@ -25,7 +25,7 @@
 
         internal int GetSize()
         {
-            return 12 + (BoneIds.Count * sizeof(short));
+            return 12 + BoneIds.Count * sizeof(short);
         }
     }
 }

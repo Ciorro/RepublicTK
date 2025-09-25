@@ -1,6 +1,4 @@
-﻿using RepublicTK.Serialization;
-
-namespace RepublicTK.Extensions
+﻿namespace RepublicTK.Serialization.Extensions
 {
     public static class SerializerExtensions
     {

@@ -1,8 +1,8 @@
 ﻿using System.Numerics;
 
-namespace RepublicTK.Models.Models
+namespace RepublicTK.Serialization.Models.Models
 {
-    public class Bone : ModelNode
+    public class Helper : ModelNode
     {
         public Matrix4x4 TransformMatrix { get; set; }
 

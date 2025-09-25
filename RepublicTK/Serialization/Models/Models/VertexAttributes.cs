@@ -1,4 +1,4 @@
-﻿namespace RepublicTK.Models.Models
+﻿namespace RepublicTK.Serialization.Models.Models
 {
     public struct VertexAttributes
     {
@@ -16,44 +16,44 @@
 
         public bool HasColors
         {
-            get => (_value & (1 << 2)) != 0;
-            set => _value |= (1 << 2);
+            get => (_value & 1 << 2) != 0;
+            set => _value |= 1 << 2;
         }
 
         public bool HasNormals
         {
-            get => (_value & (1 << 3)) != 0;
-            set => _value |= (1 << 3);
+            get => (_value & 1 << 3) != 0;
+            set => _value |= 1 << 3;
         }
 
         public bool HasTangents
         {
-            get => (_value & (1 << 4)) != 0;
-            set => _value |= (1 << 4);
+            get => (_value & 1 << 4) != 0;
+            set => _value |= 1 << 4;
         }
 
         public bool HasBitangents
         {
-            get => (_value & (1 << 5)) != 0;
-            set => _value |= (1 << 5);
+            get => (_value & 1 << 5) != 0;
+            set => _value |= 1 << 5;
         }
 
         public bool HasUVs
         {
-            get => (_value & (1 << 8)) != 0;
-            set => _value |= (1 << 8);
+            get => (_value & 1 << 8) != 0;
+            set => _value |= 1 << 8;
         }
 
         public bool HasBones
         {
-            get => (_value & (1 << 16)) != 0;
-            set => _value |= (1 << 16);
+            get => (_value & 1 << 16) != 0;
+            set => _value |= 1 << 16;
         }
 
         public bool HasFaces
         {
-            get => (_value & (1 << 18)) != 0;
-            set => _value |= (1 << 18);
+            get => (_value & 1 << 18) != 0;
+            set => _value |= 1 << 18;
         }
 
         public int GetVertexSize()

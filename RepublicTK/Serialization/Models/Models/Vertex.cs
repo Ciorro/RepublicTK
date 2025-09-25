@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace RepublicTK.Models.Models
+namespace RepublicTK.Serialization.Models.Models
 {
     public class Vertex
     {

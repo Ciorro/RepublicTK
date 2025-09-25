@@ -1,4 +1,4 @@
-﻿namespace RepublicTK.Models.Models
+﻿namespace RepublicTK.Serialization.Models.Models
 {
     public class Model
     {

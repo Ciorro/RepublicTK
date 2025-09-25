@@ -1,6 +1,6 @@
-﻿using RepublicTK.Core.Extensions;
-using RepublicTK.Core.Serialization;
-using RepublicTK.Models.Models;
+﻿using RepublicTK.Serialization;
+using RepublicTK.Serialization.Extensions;
+using RepublicTK.Serialization.Models.Models;
 
 namespace RepublicTK.Models.Serialization
 {

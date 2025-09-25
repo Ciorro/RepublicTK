@@ -1,7 +1,7 @@
-﻿using RepublicTK.Core.Models;
+﻿using RepublicTK.Serialization.Common.Models;
 using System.Numerics;
 
-namespace RepublicTK.Models.Models
+namespace RepublicTK.Serialization.Models.Models
 {
     public class Face
     {

@@ -2,7 +2,7 @@
 using System.Numerics;
 using System.Text;
 
-namespace RepublicTK.Extensions
+namespace RepublicTK.Serialization.Extensions
 {
     public static class BinaryReaderExtensions
     {
