@@ -1,8 +1,8 @@
-﻿using RepublicTK.Core.Models;
+﻿using RepublicTK.Serialization.Common.Models;
 using System.Numerics;
 using System.Text;
 
-namespace RepublicTK.Core.Extensions
+namespace RepublicTK.Extensions
 {
     public static class BinaryReaderExtensions
     {
@@ -66,8 +66,8 @@ namespace RepublicTK.Core.Extensions
 
         public static BoundingBox ReadBoundingBox(this BinaryReader reader)
         {
-            Vector3 min = ReadVector3(reader);
-            Vector3 max = ReadVector3(reader);
+            Vector3 min = reader.ReadVector3();
+            Vector3 max = reader.ReadVector3();
             return new BoundingBox(min, max);
         }
     }

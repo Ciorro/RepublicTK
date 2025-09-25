@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace RepublicTK.Trees.Models
+namespace RepublicTK.Serialization.Trees.Models
 {
     public class TreeGroupCollection : IEnumerable<TreeGroup>
     {

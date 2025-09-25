@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace RepublicTK.Core.Utils
+namespace RepublicTK.Utils
 {
     public class QuadTreeHelper
     {

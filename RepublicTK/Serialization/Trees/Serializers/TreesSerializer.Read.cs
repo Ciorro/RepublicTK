@@ -1,15 +1,12 @@
-﻿using RepublicTK.Core.Extensions;
-using RepublicTK.Core.Serialization;
-using RepublicTK.Core.Utils;
-using RepublicTK.Trees.Models;
+﻿using RepublicTK.Extensions;
+using RepublicTK.Serialization;
+using RepublicTK.Serialization.Trees.Models;
 using System.Numerics;
 
 namespace RepublicTK.Trees.Serialization
 {
     public sealed partial class TreesSerializer : ISerializer<TreeGroupCollection>
     {
-        private readonly QuadTreeHelper _quadTree = new();
-
         public TreeGroupCollection Read(BinaryReader reader)
         {
             int numGroups = reader.ReadInt32();

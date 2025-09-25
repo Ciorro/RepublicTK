@@ -1,11 +1,14 @@
-﻿using RepublicTK.Core.Extensions;
-using RepublicTK.Core.Serialization;
-using RepublicTK.Trees.Models;
+﻿using RepublicTK.Extensions;
+using RepublicTK.Serialization;
+using RepublicTK.Serialization.Trees.Models;
+using RepublicTK.Utils;
 
 namespace RepublicTK.Trees.Serialization
 {
     public sealed partial class TreesSerializer : ISerializer<TreeGroupCollection>
     {
+        private readonly QuadTreeHelper _quadTree = new();
+
         public void Write(BinaryWriter writer, TreeGroupCollection value)
         {
             int fileSize = CalcFileSize(value);

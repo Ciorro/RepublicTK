@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace RepublicTK.Core.Models
+namespace RepublicTK.Serialization.Common.Models
 {
     public struct BoundingBox
     {

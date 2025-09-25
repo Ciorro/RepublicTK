@@ -1,8 +1,8 @@
-﻿using RepublicTK.Core.Models;
+﻿using RepublicTK.Serialization.Common.Models;
 using System.Numerics;
 using System.Text;
 
-namespace RepublicTK.Core.Extensions
+namespace RepublicTK.Extensions
 {
     public static class BinaryWriterExtensions
     {
