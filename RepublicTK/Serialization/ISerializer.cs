@@ -1,4 +1,4 @@
-﻿namespace RepublicTK.Core.Serialization
+﻿namespace RepublicTK.Serialization
 {
     public interface ISerializer<T>
     {

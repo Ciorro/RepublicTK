@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace RepublicTK.Trees.Models
+namespace RepublicTK.Serialization.Trees.Models
 {
     public class TreeGroup : List<Tree>
     {
