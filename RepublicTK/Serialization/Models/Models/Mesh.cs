@@ -27,20 +27,19 @@ namespace RepublicTK.Serialization.Models.Models
         {
             Faces = new List<Face>(Indices.Count / 3);
 
-            Vector3[] p = new Vector3[3];
             for (int i = 0; i < Vertices.Count - 2; i += 3)
             {
-                p[0] = Vertices[i + 0].Position;
-                p[1] = Vertices[i + 1].Position;
-                p[2] = Vertices[i + 2].Position;
+                Vector3 p0 = Vertices[i + 0].Position;
+                Vector3 p1 = Vertices[i + 1].Position;
+                Vector3 p2 = Vertices[i + 2].Position;
 
-                Vector3 u1 = p[2] - p[0];
-                Vector3 u2 = p[1] - p[0];
+                Vector3 u1 = p2 - p0;
+                Vector3 u2 = p1 - p0;
                 Vector3 n = Vector3.Normalize(Vector3.Cross(u1, u2));
-                float d = -Vector3.Dot(n, p[0]);
+                float d = -Vector3.Dot(n, p0);
 
-                Vector3 min = p.Aggregate((v1, v2) => Vector3.Min(v1, v2));
-                Vector3 max = p.Aggregate((v1, v2) => Vector3.Max(v1, v2));
+                Vector3 min = Vector3.Min(p0, Vector3.Min(p1, p2));
+                Vector3 max = Vector3.Max(p0, Vector3.Max(p1, p2));
 
                 Vector4 plane = new Vector4(n, d);
                 BoundingBox bounds = new BoundingBox(min, max);
@@ -49,21 +48,16 @@ namespace RepublicTK.Serialization.Models.Models
             }
         }
 
-        public void CalculateSubsets()
-        {
-            Subsets = [new Subset(0, Indices.Count)];
-        }
-
-        public BoundingBox CalculateBounds()
+        public void CalculateBounds()
         {
             if (Vertices.Count >= 2)
             {
                 Vector3 min = Vertices.Select(x => x.Position).Aggregate((v1, v2) => Vector3.Min(v1, v2));
                 Vector3 max = Vertices.Select(x => x.Position).Aggregate((v1, v2) => Vector3.Max(v1, v2));
-                return Bounds = new BoundingBox(min, max);
+                Bounds = new BoundingBox(min, max);
             }
 
-            return Bounds = BoundingBox.Zero;
+            Bounds = BoundingBox.Zero;
         }
 
         internal override int GetSize()
@@ -78,7 +72,7 @@ namespace RepublicTK.Serialization.Models.Models
             int vertexSize = Attributes.GetVertexSize();
             totalSize += Vertices.Count * vertexSize;
             totalSize += Indices.Count * sizeof(short);
-            totalSize += Faces.Count * Face.FACE_SIZE;
+            totalSize += Faces.Count * Face.SIZE;
             totalSize += Subsets.Sum(x => x.GetSize());
 
             return totalSize;

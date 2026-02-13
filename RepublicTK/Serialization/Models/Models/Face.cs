@@ -3,21 +3,16 @@ using System.Numerics;
 
 namespace RepublicTK.Serialization.Models.Models
 {
-    public class Face
+    public struct Face
     {
-        internal const int FACE_SIZE = 40;
+        internal const int SIZE = 40;
 
         public Vector4 Plane { get; set; }
         public BoundingBox Bounds { get; set; }
 
-        public Face(Vector4 plane)
+        public Face(Vector4 plane, BoundingBox boundingBox)
         {
             Plane = plane;
-        }
-
-        public Face(Vector4 plane, BoundingBox boundingBox)
-            : this(plane)
-        {
             Bounds = boundingBox;
         }
     }
