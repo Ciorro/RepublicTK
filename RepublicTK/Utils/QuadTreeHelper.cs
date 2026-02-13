@@ -7,7 +7,7 @@ namespace RepublicTK.Utils
         private readonly int _worldOrigin;
         private readonly int _quadtreeSize;
         private readonly float _unitSize;
-        private readonly int[,]? _regions;
+        private readonly int[,] _regions;
 
         public QuadTreeHelper()
             : this(20000, 6)
@@ -66,7 +66,7 @@ namespace RepublicTK.Utils
         {
             int idX = (int)Math.Clamp((x + _worldOrigin) / _unitSize, 0, _quadtreeSize - 1);
             int idZ = (int)Math.Clamp((y + _worldOrigin) / _unitSize, 0, _quadtreeSize - 1);
-            return _regions![idX, idZ];
+            return _regions[idX, idZ];
         }
     }
 }
