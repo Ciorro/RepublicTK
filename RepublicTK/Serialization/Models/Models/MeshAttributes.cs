@@ -1,15 +1,15 @@
 ﻿namespace RepublicTK.Serialization.Models.Models
 {
-    public struct VertexAttributes
+    public struct MeshAttributes
     {
         private int _value;
 
-        public VertexAttributes()
+        public MeshAttributes()
             : this(1)
         {
         }
 
-        public VertexAttributes(int value)
+        public MeshAttributes(int value)
         {
             _value = value;
         }
@@ -74,12 +74,12 @@
             return vertexSize;
         }
 
-        public static implicit operator VertexAttributes(int value)
+        public static implicit operator MeshAttributes(int value)
         {
-            return new VertexAttributes(value);
+            return new MeshAttributes(value);
         }
 
-        public static implicit operator int(VertexAttributes value)
+        public static implicit operator int(MeshAttributes value)
         {
             return value._value;
         }

@@ -62,8 +62,8 @@ namespace RepublicTK.Models.Serialization
             int subsetCount = reader.ReadInt32();
 
             int morphTargetsCount = reader.ReadInt32();
-            VertexAttributes attr = reader.ReadInt32();
-            int morpsMask = reader.ReadInt32();
+            MeshAttributes attr = reader.ReadInt32();
+            int morphMask = reader.ReadInt32();
 
             node.Indices.Capacity = indexCount;
             node.Vertices.Capacity = vertexCount;

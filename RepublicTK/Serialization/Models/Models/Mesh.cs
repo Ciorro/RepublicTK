@@ -11,7 +11,7 @@ namespace RepublicTK.Serialization.Models.Models
         public List<Vertex> Vertices { get; set; } = [];
         public List<Face> Faces { get; set; } = [];
         public List<Subset> Subsets { get; set; } = [];
-        public VertexAttributes Attributes { get; set; }
+        public MeshAttributes Attributes { get; set; }
 
         public Mesh()
         {
