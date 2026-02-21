@@ -50,10 +50,17 @@ namespace RepublicTK.Serialization.Models.Models
 
         public void CalculateBounds()
         {
-            if (Vertices.Count >= 2)
+            if (Vertices.Count > 0)
             {
-                Vector3 min = Vertices.Select(x => x.Position).Aggregate((v1, v2) => Vector3.Min(v1, v2));
-                Vector3 max = Vertices.Select(x => x.Position).Aggregate((v1, v2) => Vector3.Max(v1, v2));
+                Vector3 min = new Vector3(float.MaxValue);
+                Vector3 max = new Vector3(float.MinValue);
+
+                foreach (var v in Vertices)
+                {
+                    min = Vector3.Min(min, v.Position);
+                    max = Vector3.Max(max, v.Position);
+                }
+
                 Bounds = new BoundingBox(min, max);
             }
 
