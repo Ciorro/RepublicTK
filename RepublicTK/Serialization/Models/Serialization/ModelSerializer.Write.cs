@@ -1,8 +1,7 @@
-﻿using RepublicTK.Serialization;
-using RepublicTK.Serialization.Extensions;
+﻿using RepublicTK.Serialization.Extensions;
 using RepublicTK.Serialization.Models.Models;
 
-namespace RepublicTK.Models.Serialization
+namespace RepublicTK.Serialization.Models.Serialization
 {
     public sealed partial class ModelSerializer : ISerializer<Model>
     {

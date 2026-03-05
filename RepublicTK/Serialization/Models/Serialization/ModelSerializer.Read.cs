@@ -1,8 +1,7 @@
-﻿using RepublicTK.Serialization;
-using RepublicTK.Serialization.Extensions;
+﻿using RepublicTK.Serialization.Extensions;
 using RepublicTK.Serialization.Models.Models;
 
-namespace RepublicTK.Models.Serialization
+namespace RepublicTK.Serialization.Models.Serialization
 {
     public sealed partial class ModelSerializer : ISerializer<Model>
     {
@@ -153,9 +152,9 @@ namespace RepublicTK.Models.Serialization
                 // Read faces bounds
                 for (int i = 0; i < faces.Capacity; i++)
                 {
-                    faces[i] = faces[i] with 
-                    { 
-                        Bounds = reader.ReadBoundingBox() 
+                    faces[i] = faces[i] with
+                    {
+                        Bounds = reader.ReadBoundingBox()
                     };
                 }
 
