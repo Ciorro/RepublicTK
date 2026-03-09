@@ -1,7 +1,7 @@
 ﻿using RepublicTK.Serialization.Animations.Models;
 using RepublicTK.Serialization.Extensions;
 
-namespace RepublicTK.Serialization.Animations.Serialization
+namespace RepublicTK.Serialization.Animations
 {
     public partial class AnimationSerializer : ISerializer<Animation>
     {

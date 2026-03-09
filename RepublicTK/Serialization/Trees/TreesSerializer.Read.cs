@@ -3,7 +3,7 @@ using RepublicTK.Serialization.Extensions;
 using RepublicTK.Serialization.Trees.Models;
 using System.Numerics;
 
-namespace RepublicTK.Trees.Serialization
+namespace RepublicTK.Serialization.Trees
 {
     public sealed partial class TreesSerializer : ISerializer<TreeGroupCollection>
     {
