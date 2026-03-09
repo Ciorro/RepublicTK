@@ -54,39 +54,19 @@ namespace RepublicTK.Scripts
             _cursorPosition = _selectionStart;
         }
 
-        public bool NextToken(out string token)
+        public bool NextToken(out string tokenName)
         {
             _cursorPosition = _selectionEnd;
 
             while (_cursorPosition < ScriptContent.Length)
             {
-                if (ReadNextBlock(out token) && token[0] == TokenIdentifier)
+                if (ReadNextBlock(out tokenName) && IsValidTokenName(tokenName))
                 {
-                    _selectionStart = _cursorPosition - token.Length;
-
-                    if (IsLineStart(_selectionStart))
+                    int blockStart = _cursorPosition - tokenName.Length;
+                    if (IsLineStart(blockStart))
                     {
-                        return true;
-                    }
-                }
-            }
-
-            token = "";
-            return false;
-        }
-
-        public bool PreviousToken(out string tokenName)
-        {
-            _cursorPosition = _selectionStart;
-
-            while (_cursorPosition > 0)
-            {
-                if (ReadPreviousBlock(out tokenName) && tokenName[0] == TokenIdentifier)
-                {
-                    _selectionEnd = _cursorPosition + tokenName.Length;
-
-                    if (IsLineStart(_selectionStart))
-                    {
+                        _selectionStart = blockStart;
+                        _selectionEnd = _cursorPosition;
                         return true;
                     }
                 }
@@ -96,13 +76,44 @@ namespace RepublicTK.Scripts
             return false;
         }
 
-        public bool FindToken(string tokenName)
+        public bool PreviousToken(out string tokenName)
+        {
+            _cursorPosition = _selectionStart;
+
+            while (_cursorPosition > 0)
+            {
+                if (ReadPreviousBlock(out tokenName) && IsValidTokenName(tokenName))
+                {
+                    int blockStart = _cursorPosition;
+                    if (IsLineStart(blockStart))
+                    {
+                        _selectionStart = blockStart;
+                        _selectionEnd = blockStart + tokenName.Length;
+                        return true;
+                    }
+                }
+            }
+
+            tokenName = "";
+            return false;
+        }
+
+        public bool FindFirstToken(string tokenName)
         {
             _cursorPosition = 0;
             _selectionStart = 0;
             _selectionEnd = 0;
 
             return FindNextToken(tokenName);
+        }
+
+        public bool FindLastToken(string tokenName)
+        {
+            _cursorPosition = ScriptContent.Length;
+            _selectionStart = ScriptContent.Length;
+            _selectionEnd = ScriptContent.Length;
+
+            return FindPreviousToken(tokenName);
         }
 
         public bool FindNextToken(string tokenName)
@@ -112,6 +123,9 @@ namespace RepublicTK.Scripts
                 throw new ArgumentException("Token names must be at least two characters long, start with a token identifier, and consist of only uppercase ASCII letters, digits, and underscores.", nameof(tokenName));
             }
 
+            int selectionStart = _selectionStart;
+            int selectionEnd = _selectionEnd;
+
             while (NextToken(out var token))
             {
                 if (token.Equals(tokenName, StringComparison.InvariantCultureIgnoreCase))
@@ -119,6 +133,9 @@ namespace RepublicTK.Scripts
                     return true;
                 }
             }
+
+            _selectionStart = selectionStart;
+            _selectionEnd = selectionEnd;
 
             return false;
         }
@@ -130,6 +147,9 @@ namespace RepublicTK.Scripts
                 throw new ArgumentException("Token names must be at least two characters long, start with a token identifier, and consist of only uppercase ASCII letters, digits, and underscores.", nameof(tokenName));
             }
 
+            int selectionStart = _selectionStart;
+            int selectionEnd = _selectionEnd;
+
             while (PreviousToken(out var token))
             {
                 if (token.Equals(tokenName, StringComparison.InvariantCultureIgnoreCase))
@@ -138,21 +158,38 @@ namespace RepublicTK.Scripts
                 }
             }
 
+            _selectionStart = selectionStart;
+            _selectionEnd = selectionEnd;
+
             return false;
         }
 
-        public T ReadValue<T>(uint offset = 0) where T : IParsable<T>
+        public bool ReadValue<T>(uint offset, out T? value)
+            where T: IParsable<T>
         {
             for (int i = 0; i < offset; i++)
             {
-                ReadValue<string>();
+                if (!ReadValue<string>(out _))
+                {
+                    value = default;
+                    return false;
+                }
             }
+
+            return ReadValue(out value);
+        }
+
+        public bool ReadValue<T>(out T? value) where T : IParsable<T>
+        {
+            _cursorPosition = _selectionEnd;
 
             if (ReadNextBlock(out string content))
             {
-                if (IsLineStart(_cursorPosition - content.Length) && IsValidTokenName(content))
+                int blockStart = _cursorPosition - content.Length;
+                if (IsValidTokenName(content) && IsLineStart(blockStart))
                 {
-                    throw new InvalidOperationException("Cannot read beyond the end of the current property.");
+                    value = default;
+                    return false;
                 }
 
                 if (typeof(T) == typeof(string))
@@ -160,10 +197,15 @@ namespace RepublicTK.Scripts
                     content = content.Trim('"');
                 }
 
-                return T.Parse(content, CultureInfo.InvariantCulture);
+                if (T.TryParse(content, CultureInfo.InvariantCulture, out value))
+                {
+                    _selectionEnd = _cursorPosition;
+                    return true;
+                }
             }
 
-            throw new InvalidOperationException("No more blocks to read.");
+            value = default;
+            return false;
         }
 
         private void Insert(int index, string property)
@@ -210,8 +252,6 @@ namespace RepublicTK.Scripts
 
         private bool ReadNextBlock(out string content)
         {
-            _cursorPosition = _selectionEnd;
-
             int blockStart = FindNextIndex(_cursorPosition);
             if (blockStart == -1)
             {
@@ -220,39 +260,36 @@ namespace RepublicTK.Scripts
                 return false;
             }
 
-            int blockEnd = blockStart;
             _cursorPosition = blockStart;
 
             if (ScriptContent[_cursorPosition] == '"')
             {
-                blockEnd = FindNextIndex('"', blockStart) + 1;
+                int closingIndex = FindNextIndex('"', _cursorPosition + 1);
+                if (closingIndex == -1)
+                {
+                    throw new InvalidOperationException("Unmatched quotation mark in script content.");
+                }
+
+                _cursorPosition = closingIndex + 1;
             }
             else
             {
-                blockEnd = FindNextWhiteSpace(blockStart);
+                int blockEnd = FindNextWhiteSpace(_cursorPosition);
+                if (blockEnd == -1)
+                {
+                    blockEnd = ScriptContent.Length;
+                }
+                
+                _cursorPosition = blockEnd;
             }
 
-            if (blockEnd == -1)
-            {
-                _selectionEnd = ScriptContent.Length;
-                _cursorPosition = ScriptContent.Length;
-
-                content = "";
-                return false;
-            }
-
-            _selectionEnd = blockEnd;
-            _cursorPosition = blockEnd;
-
-            content = ScriptContent[blockStart..blockEnd];
+            content = ScriptContent[blockStart.._cursorPosition];
             return true;
         }
 
         private bool ReadPreviousBlock(out string content)
         {
-            _cursorPosition = _selectionStart;
-
-            int blockEnd = FindPreviousIndex(_cursorPosition);
+            int blockEnd = FindPreviousIndex(_cursorPosition - 1);
             if (blockEnd == -1)
             {
                 _cursorPosition = 0;
@@ -260,31 +297,30 @@ namespace RepublicTK.Scripts
                 return false;
             }
 
-            int blockStart = blockEnd;
             _cursorPosition = blockEnd;
 
             if (ScriptContent[_cursorPosition] == '"')
             {
-                blockStart = FindPreviousIndex('"', blockEnd - 1);
+                int opening = FindPreviousIndex('"', _cursorPosition - 1);
+                if (opening == -1)
+                {
+                    throw new InvalidOperationException("Unmatched quotation mark in script content.");
+                }
+
+                _cursorPosition = opening;
             }
             else
             {
-                blockStart = FindPreviousWhiteSpace(blockEnd);
+                int blockStart = FindPreviousWhiteSpace(_cursorPosition);
+                if (blockStart == -1)
+                {
+                    blockStart = 0;
+                }
+
+                _cursorPosition = blockStart;
             }
 
-            if (blockStart == -1)
-            {
-                _selectionStart = 0;
-                _cursorPosition = 0;
-
-                content = "";
-                return false;
-            }
-
-            _selectionStart = blockStart;
-            _cursorPosition = blockStart;
-
-            content = ScriptContent[blockStart..blockEnd];
+            content = ScriptContent[_cursorPosition..blockEnd];
             return true;
         }
 
@@ -366,14 +402,9 @@ namespace RepublicTK.Scripts
             return -1;
         }
 
-        private bool IsValidTokenName(string name)
+        private bool IsValidTokenName(string? name)
         {
-            if (string.IsNullOrEmpty(name))
-            {
-                ArgumentException.ThrowIfNullOrEmpty(name);
-            }
-
-            return name.Length >= 2 && name[0] == TokenIdentifier &&
+            return name?.Length >= 2 && name[0] == TokenIdentifier &&
                 name.Skip(1).All(c => char.IsAsciiLetterUpper(c) || char.IsDigit(c) || c == '_');
         }
 
