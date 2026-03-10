@@ -164,7 +164,29 @@ namespace RepublicTK.Scripts
             return false;
         }
 
-        public bool ReadValue<T>(uint offset, out T? value)
+        public T? ReadValue<T>() 
+            where T : IParsable<T>
+        {
+            if (ReadValue<T>(out var value))
+            {
+                return value;
+            }
+
+            return default;
+        }
+
+        public T? ReadValue<T>(uint offset) 
+            where T : IParsable<T>
+        {
+            if (ReadValue<T>(offset, out var value))
+            {
+                return value;
+            }
+
+            return default;
+        }
+
+        public bool ReadValue<T>(uint offset, out T? value) 
             where T: IParsable<T>
         {
             for (int i = 0; i < offset; i++)
@@ -179,7 +201,8 @@ namespace RepublicTK.Scripts
             return ReadValue(out value);
         }
 
-        public bool ReadValue<T>(out T? value) where T : IParsable<T>
+        public bool ReadValue<T>(out T? value) 
+            where T : IParsable<T>
         {
             _cursorPosition = _selectionEnd;
 
